@@ -15,6 +15,7 @@ import (
 func main() {
     loadEnv()
     loadDatabase()
+    initRoutes()
 }
 
 func loadEnv() {
@@ -28,4 +29,17 @@ func loadDatabase() {
     database.Connect()
     database.Database.AutoMigrate(&model.User{})
     database.Database.AutoMigrate(&model.Todo{})
+}
+
+func initRoutes() {
+    router := gin.Default()
+
+    publicRoutes := router.Group("/auth")
+    publicRoutes.POST("/register", controller.Register)
+    publicRoutes.POST("/login", controller.Login)
+
+
+    router.Run(":8000")
+
+    fmt.Println("Server running on port 8000")
 }
